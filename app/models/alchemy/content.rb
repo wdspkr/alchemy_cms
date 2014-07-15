@@ -28,13 +28,7 @@ module Alchemy
 
     stampable stamper_class_name: Alchemy.user_class_name
 
-    acts_as_list
-
-    # ActsAsList scope
-    def scope_condition
-      # Fixes a bug with postgresql having a wrong element_id value, if element_id is nil.
-      "element_id = #{element_id || 'null'} AND essence_type = '#{essence_type}'"
-    end
+    acts_as_list scope: 'element_id'
 
     # Validations
     validates :position, uniqueness: {scope: [:element_id, :essence_type]}
