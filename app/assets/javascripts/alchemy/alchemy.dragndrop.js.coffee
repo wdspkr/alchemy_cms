@@ -52,7 +52,7 @@ $.extend Alchemy,
       stop: (event, ui) ->
         Alchemy.Tinymce.init getTinymceIDs(ui)
 
-  SortableContents: (selector, token) ->
+  SortablePictures: (selector, token) ->
     $(selector).sortable
       items: "div.dragable_picture"
       handle: "div.picture_handle"

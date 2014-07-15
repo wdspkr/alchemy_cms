@@ -9,7 +9,7 @@ $('#<%= @content.dom_id -%>').replaceWith('<%= j(
 
 <% if @content.siblings.essence_pictures.count > 1 %>
 
-Alchemy.SortableContents('#<%= @content.element.id -%>_contents', '<%= form_authenticity_token %>');
+Alchemy.SortablePictures('#<%= @content.element.id -%>_contents', '<%= form_authenticity_token %>');
 
 <% end %>
 

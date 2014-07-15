@@ -36,7 +36,7 @@ $('#element_<%= @element.id %>_contents .essence_picture_editor').addClass('drag
 $("#add_picture_<%= @element.id %>").remove();
 <% end %>
 
-Alchemy.SortableContents('#element_<%= @element.id %>_contents', '<%= form_authenticity_token %>');
+Alchemy.SortablePictures('#element_<%= @element.id %>_contents', '<%= form_authenticity_token %>');
 
 <% end %>
 
