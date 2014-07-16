@@ -257,6 +257,24 @@ module Alchemy
       end
     end
 
+    describe "#to_partial_path" do
+      let(:element) { build_stubbed(:element) }
+      let(:content) { build_stubbed(:content, element: element) }
+
+      it "returns the view partial path" do
+        expect(content.to_partial_path).to eq("alchemy/elements/#{element.name}/#{content.name}")
+      end
+    end
+
+    describe "#partial_name" do
+      let(:element) { build_stubbed(:element) }
+      let(:content) { build_stubbed(:content, element: element, name: 'A Content Name') }
+
+      it "returns the name for view partials" do
+        expect(content.partial_name).to eq('a_content_name')
+      end
+    end
+
     describe '#preview_text' do
       let(:essence) { mock_model(EssenceText, preview_text: 'Lorem') }
       let(:content) { c = Content.new; c.essence = essence; c }

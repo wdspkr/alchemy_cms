@@ -10,14 +10,14 @@ describe 'alchemy/essences/_essence_file_view' do
     let(:essence) { Alchemy::EssenceFile.new(attachment: nil) }
 
     it "renders nothing" do
-      render content, content: content
+      render content.essence, content: content
       expect(rendered).to eq('')
     end
   end
 
   context 'with attachment' do
     it "renders a link to download the attachment" do
-      render content, content: content
+      render content.essence, content: content
       expect(rendered).to have_selector("a.file_link[href='/attachment/#{attachment.id}/download']")
     end
   end

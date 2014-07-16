@@ -8,14 +8,14 @@ describe 'alchemy/essences/_essence_html_view' do
     let(:essence) { Alchemy::EssenceHtml.new(source: nil) }
 
     it "renders nothing" do
-      render content, content: content
+      render content.essence, content: content
       expect(rendered).to eq('')
     end
   end
 
   context 'with value' do
     it "renders the raw html source" do
-      render content, content: content
+      render content.essence, content: content
       expect(rendered).to have_selector("script")
     end
   end

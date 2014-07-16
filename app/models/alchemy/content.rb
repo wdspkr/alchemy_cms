@@ -71,7 +71,7 @@ module Alchemy
       end
     end
 
-    # The content's view partial is dependent from its name
+    # The content's view partial is dependent from its name and its element name
     #
     # == Define contents
     #
@@ -84,10 +84,15 @@ module Alchemy
     #
     # == Override the view
     #
-    # Content partials live in +app/views/alchemy/essences+
+    # Content partials live in +app/views/alchemy/elements/name_of_element+
     #
     def to_partial_path
-      "alchemy/essences/#{essence_partial_name}_view"
+      "alchemy/elements/#{element.name}/#{partial_name}"
+    end
+
+    # Returns the name of the content view partial
+    def partial_name
+      name.gsub(/\s/, '_').downcase
     end
 
     # Settings from the elements.yml definition

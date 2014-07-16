@@ -12,7 +12,7 @@ describe 'alchemy/essences/_essence_date_view' do
   context "with date value" do
     context 'without date_format passed' do
       it "translates the date value with default format" do
-        render content, content: content
+        render content.essence, content: content
         expect(rendered).to have_content('Sun, 27 Oct 2013 20:14:16 +0000')
       end
     end
@@ -21,7 +21,7 @@ describe 'alchemy/essences/_essence_date_view' do
       let(:options) { {date_format: 'rfc822'} }
 
       it "renders the date rfc822 conform" do
-        render content, content: content
+        render content.essence, content: content
         expect(rendered).to have_content('Sun, 27 Oct 2013 20:14:16 +0000')
       end
     end
@@ -31,7 +31,7 @@ describe 'alchemy/essences/_essence_date_view' do
     let(:essence) { Alchemy::EssenceDate.new(date: nil) }
 
     it "renders nothing" do
-      render content, content: content
+      render content.essence, content: content
       expect(rendered).to eq('')
     end
   end
