@@ -3,7 +3,7 @@
   position: absolute;
   right: 0;
   top: 73px;
-  width: 400px;
+  width: 413px;
   height: auto;
   border-left: $default-border;
   @include transition(200ms ease-in-out);
@@ -79,7 +79,7 @@ span.preview_text_element_name {
 
 .add_picture {
   float: left;
-  margin: 1px;
+  margin: 2px;
   width: 119px;
   border: 1px solid #c0c0c0;
   @extend %rounded-border;
@@ -269,16 +269,16 @@ a.element_move_button {
   background: image-url('alchemy/icons.png') no-repeat -97px -72px;
 }
 
-div.picture_gallery_images {
+.picture_gallery_images {
   overflow: hidden;
   margin: $default-margin 0;
   border: 1px solid $default-border-color;
   @extend %rounded-border;
   background-color: $medium-gray;
-  padding: 1px;
+  padding: $default-padding;
 
   .essence_picture_editor {
-    margin: 1px;
+    margin: 2px;
     float: left;
     height: 126px;
 
