@@ -31,7 +31,7 @@ module Alchemy
     acts_as_list scope: 'element_id'
 
     # Validations
-    validates :position, uniqueness: {scope: [:element_id, :essence_type]}
+    validates :position, uniqueness: {scope: 'element_id'}
 
     # Essence scopes
     scope :essence_booleans,  -> { where(essence_type: "Alchemy::EssenceBoolean") }
