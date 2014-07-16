@@ -78,17 +78,18 @@ span.preview_text_element_name {
 }
 
 .add_picture {
+  @include box-sizing(border-box);
   float: left;
-  margin: 2px;
-  width: 119px;
-  border: 1px solid #c0c0c0;
+  padding: 2px;
+  margin-bottom: 2px;
+  width: 33.333%;
   @extend %rounded-border;
-  height: 123px;
+  height: 126px;
 
   a {
     display: block;
     height: 100%;
-    width: 100%;
+    width: auto;
     position: relative;
     text-decoration: none;
     overflow: hidden;
@@ -98,18 +99,21 @@ span.preview_text_element_name {
     @extend %rounded-border;
     font-size: 40px;
     background-color: $light-gray;
+    border: 1px solid #c0c0c0;
 
     &:hover {
       background-color: $medium-gray;
     }
 
     .icon {
-      font-size: 30px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
       width: 30px;
       height: 30px;
-      position: absolute;
-      top: 48px;
-      left: 44px;
+      margin-top: -15px;
+      margin-left: -15px;
+      font-size: 30px;
     }
   }
 }
@@ -275,12 +279,15 @@ a.element_move_button {
   border: 1px solid $default-border-color;
   @extend %rounded-border;
   background-color: $medium-gray;
-  padding: $default-padding;
+  padding: 2px;
 
   .essence_picture_editor {
-    margin: 2px;
-    float: left;
+    @include box-sizing(border-box);
+    width: 33.333%;
     height: 126px;
+    padding: 2px;
+    margin-bottom: 2px;
+    float: left;
 
     .picture_thumbnail { margin: 0 }
   }
@@ -380,17 +387,7 @@ a.fold_element {
   }
 }
 
-div.content_editor.essence_date {
-  float: none;
-  @include inline-block;
-  vertical-align: top;
-
-  input.date {
-    width: 154px;
-  }
-}
-
-div.essence_picture_editor {
+.essence_picture_editor {
   position: relative;
 
   .picture_tool_delete {
@@ -406,12 +403,12 @@ div.essence_picture_editor {
   }
 
   .picture_thumbnail {
-    width: 111px;
-    height: 115px;
+    @include box-sizing(border-box);
+    width: 100%;
+    height: 124px;
     margin: $default-margin 0;
 
     .thumbnail_background {
-      width: 111px;
       height: 93px;
     }
   }
@@ -491,19 +488,6 @@ div.file_icon {
   }
 }
 
-.content_editor.essence_file {
-
-  .file_name {
-    white-space: nowrap;
-    overflow: hidden;
-    float: left;
-    max-width: 80%;
-    line-height: 25px;
-    font-size: 10px;
-    text-overflow: ellipsis;
-  }
-}
-
 .essence_file_tools {
   height: 24px;
   float: right;
@@ -534,9 +518,13 @@ a.new_content_link {
   margin-top: 4px;
 }
 
-div.tinymce_container {
+.tinymce_container {
   position: relative;
-  margin: $default-margin 0;
+  margin: 4px 0;
+
+  > .mce-container {
+    @include box-sizing(border-box);
+  }
 
   .spinner {
     top: 70px;
@@ -555,13 +543,10 @@ select.long {
   padding: 0;
 }
 
-div.content_editor {
+.content_editor {
+  padding: 0 4px;
   margin-bottom: 8px;
   position: relative;
-
-  .thin_border, input[type="text"] {
-    width: 100%;
-  }
 
   &.missing p {
     line-height: 25px;
@@ -597,42 +582,31 @@ div.content_editor {
     }
   }
 
-  label {
-    display: block;
-    margin-bottom: 2px;
+  &.essence_file .file_name {
+    white-space: nowrap;
+    overflow: hidden;
+    float: left;
+    max-width: 80%;
+    line-height: 25px;
     font-size: 10px;
-    text-shadow: #fff5e1 1px 1px 0;
-    line-height: 15px;
-    text-indent: 1px;
+    text-overflow: ellipsis;
+  }
 
-    span.warning.icon {
-      position: relative;
-      top: 2px;
+  &.essence_date {
+    float: none;
+    @include inline-block;
+    vertical-align: top;
+
+    input.date {
+      width: 154px;
     }
+  }
 
-    &.inline {
-      @include inline-block;
-      min-width: 90px;
-      margin-right: 4px;
-    }
-
-    a.icon_button.small {
-      width: 10px;
-      height: 10px;
-      display: none;
-
-      .icon {
-        top: 1px;
-        right: 1px;
-      }
-
-      &:hover {
-
-        .icon {
-          right: 2px;
-        }
-      }
-    }
+  &.essence_picture_editor {
+    @include box-sizing(border-box);
+    width: 33.333%;
+    @include inline-block;
+    margin-right: -4px;
   }
 
   &.essence_select {
@@ -648,11 +622,53 @@ div.content_editor {
     }
   }
 
-  &:hover label a.icon_button.small {
-    @include inline-block;
+  .thin_border, input[type="text"] {
+    width: 100%;
   }
 
-  select.essence_editor_select {
+  .content-editor-label {
+    border-bottom: 1px solid $medium-gray;
+  }
+
+  label {
+    display: inline-block;
+    padding: 2px 0;
+    font-size: 10px;
+    line-height: 1;
+
+    span.warning.icon {
+      position: relative;
+      top: 2px;
+    }
+
+    &.inline {
+      @include inline-block;
+      min-width: 90px;
+      margin-right: 4px;
+    }
+
+    .icon_button.small {
+      width: 10px;
+      height: 10px;
+      display: inline-block;
+      top: -1px;
+      left: 2px;
+
+      .icon {
+        top: 1px;
+        left: 0;
+      }
+
+      &:hover {
+
+        .icon {
+          left: -1px;
+        }
+      }
+    }
+  }
+
+  .essence_editor_select {
     @extend %rounded-border;
     background: white;
     border: 1px solid $button-border-color;
@@ -677,22 +693,6 @@ div.content_editor {
       padding-bottom: 2px;
       color: black;
     }
-  }
-
-  &.essence_date {
-    float: none;
-    @include inline-block;
-    vertical-align: top;
-
-    input.date {
-      width: 154px;
-    }
-  }
-
-  &.essence_picture_editor {
-    float: none;
-    height: auto;
-    @include inline-block;
   }
 }
 
@@ -769,4 +769,20 @@ a.hint {
       left: 5px;
     }
   }
+}
+
+.element_content {
+  margin: 0 -4px;
+
+  .new_content_link {
+    margin: 8px 4px;
+  }
+}
+
+.sortable-contents .content_editor label {
+  cursor: move;
+  background-color: $medium-gray;
+  padding: 2px 8px 0;
+  line-height: 1.5;
+  @include border-top-radius($default-border-radius);
 }

@@ -1,5 +1,5 @@
 <% cache(content) do %>
-<div class="content_editor essence_link" id="<%= content.dom_id %>">
+<div class="content_editor essence_link" id="<%= content.dom_id %>" data-content-id="<%= content.id %>">
   <label><%= render_content_name(content) %></label>
   <%= text_field_tag(
     '',

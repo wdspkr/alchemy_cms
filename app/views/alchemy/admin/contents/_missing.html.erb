@@ -1,5 +1,7 @@
 <div class="content_editor missing" data-element-<%= element.id %>-missing-content="<%= name %>">
-  <label><%= Alchemy::Content.translated_label_for(name, element.name) %></label>
+  <div class="content-editor-label">
+    <label><%= Alchemy::Content.translated_label_for(name, element.name) %></label>
+  </div>
   <p>
     <%= render_icon('warning') %>
     <%= _t(:content_not_found) %>

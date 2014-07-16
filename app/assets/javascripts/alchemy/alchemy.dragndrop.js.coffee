@@ -52,6 +52,25 @@ $.extend Alchemy,
       stop: (event, ui) ->
         Alchemy.Tinymce.init getTinymceIDs(ui)
 
+  SortableContents: (selector, token) ->
+    $(selector).sortable
+      items: ".content_editor"
+      handle: "label"
+      opacity: 0.5
+      cursor: "move"
+      tolerance: "pointer"
+      containment: "parent"
+      update: (event, ui) ->
+        $this = $(this)
+        ids = $.map $this.find('.content_editor'), (item) ->
+          $(item).data('content-id')
+        $.ajax
+          url: Alchemy.routes.order_admin_contents_path
+          type: "POST"
+          data: "authenticity_token=" + encodeURIComponent(token) + "&" + $.param(content_ids: ids)
+        return
+    return
+
   SortablePictures: (selector, token) ->
     $(selector).sortable
       items: "div.dragable_picture"

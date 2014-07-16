@@ -1,17 +1,45 @@
 require 'spec_helper'
 
 include Alchemy::ElementsHelper
+include Alchemy::Admin::ContentsHelper
+include Alchemy::Admin::EssencesHelper
 
 module Alchemy
   describe ElementsBlockHelper do
-    let(:page)    { FactoryGirl.create(:public_page) }
-    let(:element) { FactoryGirl.create(:element, page: page, tag_list: 'foo, bar') }
+    let(:page)    { build_stubbed(:public_page) }
+    let(:element) { build_stubbed(:element, page: page, tag_list: 'foo, bar') }
+    let(:content) { build_stubbed(:content, name: 'intro', element: element, ingredient: 'Yahooo') }
     let(:expected_wrapper_tag) { "div.#{element.name}##{element_dom_id(element)}" }
 
     describe '#element_view_for' do
-      it "should yield an instance of ElementViewHelper" do
-        expect { |b| element_view_for(element, &b) }.
-          to yield_with_args(ElementsBlockHelper::ElementViewHelper)
+      context "with block given" do
+        it "should yield an instance of ElementViewHelper" do
+          expect { |b| element_view_for(element, &b) }.
+            to yield_with_args(ElementsBlockHelper::ElementViewHelper)
+        end
+      end
+
+      context "without block given" do
+        subject { element_view_for(element) }
+
+        before do
+          element.stub(contents: [content])
+        end
+
+        context 'with content view partial present' do
+          it "renders element contents view partials by position" do
+            expect(subject).to have_selector('h1')
+            expect(subject).to have_content('Yahooo')
+          end
+        end
+
+        context "without content view partial present" do
+          let(:content) { build_stubbed(:content, name: 'text', element: element, ingredient: 'Yada') }
+
+          it "renders the essence view instead" do
+            expect(subject).to have_content('Yada')
+          end
+        end
       end
 
       it "should wrap its output in a DOM element" do
@@ -58,15 +86,50 @@ module Alchemy
     end
 
     describe '#element_editor_for' do
-      it "should yield an instance of ElementEditorHelper" do
-        expect { |b| element_editor_for(element, &b) }.
-          to yield_with_args(ElementsBlockHelper::ElementEditorHelper)
+      context 'with block given' do
+        it "should yield an instance of ElementEditorHelper" do
+          expect { |b| element_editor_for(element, &b) }.
+            to yield_with_args(ElementsBlockHelper::ElementEditorHelper)
+        end
+
+        it "should not add any extra elements" do
+          element_editor_for(element) do
+            'view'
+          end.should == 'view'
+        end
       end
 
-      it "should not add any extra elements" do
-        element_editor_for(element) do
-          'view'
-        end.should == 'view'
+      context "without a block given" do
+        subject { element_editor_for(element) }
+
+        before do
+          element.stub(contents: [content])
+        end
+
+        it "renders element content editors by position" do
+          expect(subject).to have_selector('.content_editor')
+          expect(subject).to have_selector('[data-content-id]')
+        end
+      end
+
+      context "with sortable option set to true" do
+        subject { element_editor_for(element, sortable: true) }
+
+        it "enables dragndrop sorting" do
+          expect(subject).to have_selector('.sortable-contents')
+        end
+      end
+
+      context "with element having available_contents" do
+        subject { element_editor_for(element) }
+
+        before do
+          element.stub(available_contents: [content])
+        end
+
+        it "renders new content button" do
+          expect(subject).to have_selector('.new_content_link')
+        end
       end
     end
 

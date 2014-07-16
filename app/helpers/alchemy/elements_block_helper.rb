@@ -66,12 +66,17 @@ module Alchemy
       end
     end
 
-    # Block-level helper for element views. Constructs a DOM element wrapping
-    # your content element and provides a block helper object you can use for
+    # Block-level helper for element views.
+    #
+    # Constructs a DOM element wrapping your content element
+    # and provides a block helper object you can use for
     # concise access to Alchemy's various helpers.
     #
-    # === Example:
+    # If you omit the block, then all contents view partials get rendered by its position
     #
+    # === Block example:
+    #
+    #   # app/views/alchemy/elements/_element_name_view.html.erb
     #   <%= element_view_for(element) do |el| %>
     #     <%= el.render :title %>
     #     <%= el.render :body %>
@@ -91,6 +96,26 @@ module Alchemy
     #   <%= element_view_for(element, tag: false) do |el| %>
     #      <%- ... %>
     #   <% end %>
+    #
+    # === Sorted contents example:
+    #
+    # Omit the block to render content view partials by its position
+    #
+    #   # app/views/alchemy/elements/_article_view.html.erb
+    #   <%= element_view_for(element) %>
+    #
+    # ==== Content view partials:
+    #
+    # If you want to change the markup of the rendered content you can create a content view partial.
+    #
+    # Content view partials live in a folder inside of `app/views/alchemy/elements`
+    # named by its element name:
+    #
+    #   # app/views/alchemy/elements/article/_headline.html.erb
+    #   <h1><%= render_essence_view(content) %></h1>
+    #
+    # Partial Fallback: If the content editor view is not present,
+    # we fall back to render the contents essence view partial instead.
     #
     # @param [Alchemy::Element] element
     #   The element to display.
@@ -116,7 +141,19 @@ module Alchemy
 
       # capture inner template block
       output = capture do
-        yield ElementViewHelper.new(self, :element => element) if block_given?
+        if block_given?
+          yield ElementViewHelper.new(self, element: element)
+        else
+          element.contents.each do |content|
+            begin
+              # try to render the contents view partial
+              concat render(content, content: content)
+            rescue ActionView::MissingTemplate
+              # if not present we render the contents essence view partial instead
+              concat render(content.essence, content: content)
+            end
+          end
+        end
       end
 
       # wrap output in a useful DOM element
@@ -135,10 +172,13 @@ module Alchemy
       # that's it!
       output
     end
+
     # Block-level helper for element editors. Provides a block helper object
     # you can use for concise access to Alchemy's various helpers.
     #
-    # === Example:
+    # If you omit the block, Alchemy renders all content editors by its position.
+    #
+    # === Block example:
     #
     #   <%= element_editor_for(element) do |el| %>
     #     <%= el.edit :title %>
@@ -146,17 +186,42 @@ module Alchemy
     #     <%= el.edit :target_url %>
     #   <% end %>
     #
+    # === Sortable example:
+    #
+    #   <%= element_editor_for(element, sortable: true) %>
+    #
     # @param [Alchemy::Element] element
     #   The element to display.
+    # @param [Hash] options
+    #   Additional options.
+    #
+    # @option options sortable (false)
+    #   If you want the contents to be sortable pass true.
     #
     def element_editor_for(element, options = {})
       options = {
-        # nothing here yet.
+        sortable: false
       }.merge(options)
 
-      capture do
-        yield ElementEditorHelper.new(self, :element => element)
+      output = capture do
+        if block_given?
+          yield ElementEditorHelper.new(self, element: element)
+        else
+          element.contents.each do |content|
+            concat render_essence_editor(content)
+          end
+          if element.available_contents.any?
+            concat render_new_content_link(element)
+          end
+        end
+      end
+
+      if options[:sortable]
+        output = content_tag(:div, output, class: 'sortable-contents')
+      else
+        output
       end
     end
+
   end
 end

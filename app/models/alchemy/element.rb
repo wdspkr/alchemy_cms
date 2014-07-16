@@ -217,7 +217,7 @@ module Alchemy
     # Returns the array with the hashes for all element contents in the elements.yml file
     def content_descriptions
       return nil if definition.blank?
-      definition['contents']
+      definition.fetch('contents', [])
     end
 
     # Returns the definition for given content_name
@@ -238,7 +238,7 @@ module Alchemy
 
     # returns the collection of available essence_types that can be created for this element depending on its description in elements.yml
     def available_contents
-      definition['available_contents']
+      definition.fetch('available_contents', [])
     end
 
     # Returns the contents ingredient for passed content name.
