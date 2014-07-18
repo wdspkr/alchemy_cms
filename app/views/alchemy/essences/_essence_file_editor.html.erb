@@ -1,3 +1,4 @@
+<% cache(content) do %>
 <div class="content_editor essence_file" id="<%= content.dom_id %>" data-content-id="<%= content.id %>">
   <label style="display: inline">
     <%= render_content_name(content) %>
@@ -9,8 +10,8 @@
       <%= link_to_dialog '',
         alchemy.admin_attachments_path(
           content_id: content.id,
-          only: options[:file_assign_show_only],
-          except: options[:file_assign_do_not_show],
+          only: value_from_settings_or_options(content, options, :file_assign_show_only),
+          except: value_from_settings_or_options(content, options, :file_assign_do_not_show),
           options: options.to_json
         ),
         {
@@ -34,8 +35,8 @@
       <%= link_to_dialog '',
         alchemy.admin_attachments_path(
           content_id: content.id,
-          only: options[:file_assign_show_only],
-          except: options[:file_assign_do_not_show],
+          only: value_from_settings_or_options(content, options, :file_assign_show_only),
+          except: value_from_settings_or_options(content, options, :file_assign_do_not_show),
           options: options.to_json
         ),
         {
@@ -64,3 +65,4 @@
     <% end %>
   </div>
 </div>
+<% end %>
