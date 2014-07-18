@@ -3,7 +3,10 @@
   <input type="hidden" value="0" name="<%= content.form_field_name %>">
   <%= check_box_tag content.form_field_name, 1,
     content.ingredient.presence ||
-      value_from_settings_or_options(content, options, :default_value),
+      value_from_settings_or_options(
+        content,
+        local_assigns.fetch(:options, {}),
+        :default_value),
     class: html_options[:class],
     style: html_options[:style]
   %>

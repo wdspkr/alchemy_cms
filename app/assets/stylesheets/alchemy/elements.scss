@@ -316,12 +316,12 @@ div#cells {
     padding: 3px;
     position: absolute;
     bottom: 4px;
-    right: 28px;
+    right: 32px;
     @extend %button-defaults;
     @include border-radius(0);
 
     &.unlink {
-      right: 0;
+      right: 4px;
       @extend .right-rounded-border;
     }
   }
@@ -774,12 +774,13 @@ a.hint {
 .element_content {
   margin: 0 -4px;
 
-  .new_content_link {
-    margin: 8px 4px;
+  .new_content_link, .error, .message {
+    margin-left: 4px;
+    margin-right: 4px;
   }
 }
 
-.sortable-contents .content_editor label {
+.sortable-contents .content-editor-label label {
   cursor: move;
   background-color: $medium-gray;
   padding: 2px 8px 0;

@@ -2,10 +2,11 @@
 <%- if content.ingredient.present? -%>
 <%- html_options = {
   target: content.essence.link_target == "blank" ? "_blank" : nil
-}.merge(html_options) -%>
+}.merge(local_assigns.fetch(:html_options, {})) -%>
 <%= link_to(content.ingredient, html_options) do -%>
-<%= value_from_settings_or_options(content, options, :text) ||
-   content.ingredient -%>
+<%= value_from_settings_or_options(content,
+    local_assigns.fetch(:options, {}),
+    :text) || content.ingredient -%>
 <%- end -%>
 <%- end -%>
 <%- end -%>
