@@ -547,6 +547,7 @@ select.long {
   padding: 0 4px;
   margin-bottom: 8px;
   position: relative;
+  overflow: hidden;
 
   &.missing p {
     line-height: 25px;
@@ -609,12 +610,21 @@ select.long {
     margin-right: -4px;
   }
 
+  &.essence_boolean {
+    margin-bottom: 12px;
+  }
+
+  &.essence_html_editor {
+    margin-bottom: 5px;
+  }
+
   &.essence_select {
 
     label { margin-bottom: 4px }
 
     .select2-container {
       width: 100%;
+      margin-bottom: 4px;
     }
 
     &.display_inline .select2-container {
@@ -669,13 +679,6 @@ select.long {
   }
 
   .essence_editor_select {
-    @extend %rounded-border;
-    background: white;
-    border: 1px solid $button-border-color;
-    font-size: 11px;
-    height: 21px;
-    line-height: 21px;
-    padding: 2px;
 
     optgroup {
       color: gray;
