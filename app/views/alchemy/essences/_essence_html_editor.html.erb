@@ -1,5 +1,5 @@
 <% cache(content) do %>
-<div class="content_editor essence_html_editor"<%= value_from_settings_or_options(content, local_assigns.fetch(:options, {}), :css_class) == "text_short" ? ' style="float: left;"' : '' %> data-content-id="<%= content.id %>">
+<div class="content_editor essence_html" data-content-id="<%= content.id %>" id="<%= content.dom_id %>">
   <%= label_and_remove_link(content) %>
   <%= text_area_tag(
     content.form_field_name,

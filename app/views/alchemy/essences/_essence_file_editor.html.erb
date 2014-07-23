@@ -1,24 +1,31 @@
 <% cache(content) do %>
+<% assign_file_link = link_to_dialog '',
+  alchemy.admin_attachments_path(
+    content_id: content.id,
+    only: value_from_settings_or_options(
+      content,
+      local_assigns.fetch(:options, {}),
+      :only),
+    except: value_from_settings_or_options(
+      content,
+      local_assigns.fetch(:options, {}),
+      :except),
+    options: options.to_json
+  ),
+  {
+    title: _t(:assign_file),
+    size: '780x585',
+    padding: false
+  },
+  class: 'assign_file',
+  title: _t(:assign_file) %>
+
 <div class="content_editor essence_file" id="<%= content.dom_id %>" data-content-id="<%= content.id %>">
   <%= label_and_remove_link(content) %>
   <div class="file" id="file_<%= content.id %>">
     <div class="file_icon">
     <% if content.ingredient.nil? %>
-      <%= link_to_dialog '',
-        alchemy.admin_attachments_path(
-          content_id: content.id,
-          only: value_from_settings_or_options(content, local_assigns.fetch(:options, {}), :file_assign_show_only),
-          except: value_from_settings_or_options(content, local_assigns.fetch(:options, {}), :file_assign_do_not_show),
-          options: options.to_json
-        ),
-        {
-          title: _t(:assign_file),
-          size: '780x585',
-          padding: false
-        },
-        class: 'assign_file',
-        title: _t(:assign_file)
-      %>
+      <%= assign_file_link %>
     <% else %>
       <%= render_icon(content.ingredient.icon_css_class) %>
     <% end %>
@@ -26,39 +33,23 @@
     <div class="file_name">
       <%= content.ingredient.name rescue ("&#x2190;" + _t(:assign_file_from_archive)).html_safe %>
     </div>
-    <% unless content.ingredient.nil? %>
-    <%= hidden_field_tag content.form_field_name(:attachment_id), content.ingredient.id %>
-    <div class="essence_file_tools">
-      <%= link_to_dialog '',
-        alchemy.admin_attachments_path(
-          content_id: content.id,
-          only: value_from_settings_or_options(content, local_assigns.fetch(:options, {}), :file_assign_show_only),
-          except: value_from_settings_or_options(content, local_assigns.fetch(:options, {}), :file_assign_do_not_show),
-          options: options.to_json
-        ),
-        {
-          title: _t(:assign_file),
-          size: '780x585',
-          padding: false
-        },
-        class: 'assign_file',
-        title: _t(:assign_file)
-      %>
-      <%= link_to_dialog '',
-        url_for(
-          controller: 'essence_files',
-          action: 'edit',
-          options: options.to_json,
-          id: content
-        ),
-        {
-          title: _t(:edit_file_properties),
-          size: '400x165'
-        },
-        class: 'edit_file',
-        title: _t(:edit_file_properties)
-      %>
-    </div>
+    <% if content.ingredient %>
+      <%= hidden_field_tag content.form_field_name(:attachment_id), content.ingredient.id %>
+      <div class="essence_file_tools">
+        <%= assign_file_link %>
+        <%= link_to_dialog '',
+          alchemy.edit_admin_essence_file_path(
+            id: content.essence_id,
+            options: options.to_json
+          ),
+          {
+            title: _t(:edit_file_properties),
+            size: '400x165'
+          },
+          class: 'edit_file',
+          title: _t(:edit_file_properties)
+        %>
+      </div>
     <% end %>
   </div>
 </div>

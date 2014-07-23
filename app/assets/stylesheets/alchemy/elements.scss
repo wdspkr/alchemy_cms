@@ -281,12 +281,11 @@ a.element_move_button {
   background-color: $medium-gray;
   padding: 2px;
 
-  .essence_picture_editor {
-    @include box-sizing(border-box);
-    width: 33.333%;
+  .content_editor.essence_picture {
     height: 126px;
     padding: 2px;
     margin-bottom: 2px;
+    margin-right: 0;
     float: left;
 
     .picture_thumbnail { margin: 0 }
@@ -387,7 +386,7 @@ a.fold_element {
   }
 }
 
-.essence_picture_editor {
+.essence_picture.content_editor {
   position: relative;
 
   .picture_tool_delete {
@@ -603,7 +602,7 @@ select.long {
     }
   }
 
-  &.essence_picture_editor {
+  &.essence_picture {
     @include box-sizing(border-box);
     width: 33.333%;
     @include inline-block;
@@ -614,8 +613,14 @@ select.long {
     margin-bottom: 12px;
   }
 
-  &.essence_html_editor {
+  &.essence_html {
     margin-bottom: 5px;
+
+    textarea {
+      font-family: $mono-font-face;
+      resize: vertical;
+      font-size: 11px;
+    }
   }
 
   &.essence_select {
@@ -710,19 +715,6 @@ div.pictures_for_element {
 
 textarea.default_tinymce, textarea.custom_tinymce {
   visibility: hidden;
-}
-
-.essence_html_editor textarea {
-  font-family: $mono-font-face;
-  resize: vertical;
-  font-size: 11px;
-}
-
-.text_short_float_left {
-  width: 170px;
-  float: left;
-  margin-right: 10px;
-  border-width: 1px;
 }
 
 .element_errors {

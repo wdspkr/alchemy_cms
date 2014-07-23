@@ -1,5 +1,5 @@
 <% cache(content) do %>
-<div id="<%= content.dom_id %>" class="essence_picture_editor<%= ' dragable_picture' if options[:dragable] %><%= ' content_editor' unless options[:grouped] %>" data-content-id="<%= content.id %>">
+<div id="<%= content.dom_id %>" class="content_editor essence_picture<%= ' dragable_picture' if options[:dragable] %><%= ' grouped' if options[:grouped] %>" data-content-id="<%= content.id %>">
   <% unless options[:grouped] %>
   <%= label_and_remove_link(content) %>
   <% end %>
@@ -42,13 +42,9 @@
     </div>
     <%- end -%>
     <div class="edit_images_bottom">
-      <%= render(
-        partial: 'alchemy/essences/shared/essence_picture_tools',
-        locals: {
-          content: content,
-          options: options
-        }
-      ) %>
+      <%= render 'alchemy/essences/shared/essence_picture_tools',
+        content: content,
+        options: options %>
     </div>
   </div>
   <%= hidden_field_tag content.form_field_name(:link), content.essence.link %>

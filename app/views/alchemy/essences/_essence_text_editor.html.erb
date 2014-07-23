@@ -1,13 +1,15 @@
 <% cache(content) do %>
+  <% linkable = value_from_settings_or_options(content,
+    local_assigns.fetch(:options, {}), :linkable) %>
   <div class="essence_text content_editor<%= options[:display_inline].to_s == 'true' ? ' display_inline' : '' %>" id="<%= content.dom_id %>" data-content-id="<%= content.id %>">
     <%= label_and_remove_link(content) %>
     <%= text_field_tag(
       content.form_field_name,
       content.ingredient,
-      class: ["thin_border #{content.settings[:linkable] ? ' text_with_icon' : ''}", html_options[:class]].join(' '),
+      class: ["thin_border #{linkable ? ' text_with_icon' : ''}", html_options[:class]].join(' '),
       style: html_options[:style]
     ) %>
-    <% if content.settings[:linkable] %>
+    <% if linkable %>
       <%= hidden_field_tag content.form_field_name(:link), content.essence.link %>
       <%= hidden_field_tag content.form_field_name(:link_title), content.essence.link_title %>
       <%= hidden_field_tag content.form_field_name(:link_class_name), content.essence.link_class_name %>

@@ -139,3 +139,50 @@ shared_examples_for "an essence" do
     end
   end
 end
+
+shared_examples_for "an essence editor partial" do
+  let(:element) { Alchemy::Element.new }
+  let(:content) { build_stubbed(:content, essence: essence, name: 'I am content', element: element) }
+
+  before do
+    content.element = element
+    content.stub(description: {name: content.name})
+    content.stub(settings: {deletable: true})
+    content.stub(hint: "I am a hint")
+    render_essence_editor(content)
+  end
+
+  it "has an id attribute" do
+    expect(rendered).to have_selector("[id=\"#{content.dom_id}\"]")
+  end
+
+  it "has a data-content-id attribute" do
+    expect(rendered).to have_selector("[data-content-id=\"#{content.id}\"]")
+  end
+
+  it "has an essence_editor class" do
+    expect(rendered).to have_selector(".content_editor")
+  end
+
+  it "has a class for essence_type" do
+    expect(rendered).to have_selector(".#{content.essence_type.to_s.demodulize.underscore}")
+  end
+
+  it "has a label with name in it" do
+    expect(rendered).to have_selector(".content_editor label")
+    expect(rendered).to have_content(content.name_for_label)
+  end
+
+  context 'with settings[:deletable] true' do
+    it "has a link for removing the content" do
+      expect(rendered).to have_selector("label a[data-alchemy-confirm-delete]")
+    end
+  end
+
+  context 'with hint present' do
+    it "has a hint icon" do
+      expect(rendered).to have_selector("label a.hint")
+      expect(rendered).to have_content("I am a hint")
+    end
+  end
+end
