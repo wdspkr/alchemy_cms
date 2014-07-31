@@ -5,26 +5,25 @@ window.Alchemy = {} if typeof (window.Alchemy) is "undefined"
 
 $.extend Alchemy,
 
+  tinymceIDsFromDraggable: (ui) ->
+    ids = []
+    $textareas = ui.item.find('textarea.default_tinymce, textarea.custom_tinymce')
+    $($textareas).each ->
+      id = this.id.replace(/tinymce_/, '')
+      ids.push parseInt(id, 10)
+    ids
+
   SortableElements: (page_id, form_token, selector = '#element_area .sortable_cell') ->
-
-    getTinymceIDs = (ui) ->
-      ids = []
-      $textareas = ui.item.find('textarea.default_tinymce, textarea.custom_tinymce')
-      $($textareas).each ->
-        id = this.id.replace(/tinymce_/, '')
-        ids.push parseInt(id, 10)
-      return ids
-
     $(selector).sortable
       items: "div.element_editor"
       handle: ".element_handle"
-      axis: "y"
       placeholder: "droppable_element_placeholder"
       forcePlaceholderSize: true
       dropOnEmpty: true
       opacity: 0.5
       cursor: "move"
       tolerance: "pointer"
+      containment: "parent"
       update: (event, ui) ->
         ids = $.map $(this).children(), (child) ->
           $(child).attr "data-element-id"
@@ -45,12 +44,12 @@ $.extend Alchemy,
           complete: ->
             $(event.target).css "cursor", "auto"
             Alchemy.TrashWindow.refresh page_id
-
       start: (event, ui) ->
-        Alchemy.Tinymce.remove getTinymceIDs(ui)
-
+        ids = Alchemy.tinymceIDsFromDraggable(ui)
+        Alchemy.Tinymce.remove(ids)
       stop: (event, ui) ->
-        Alchemy.Tinymce.init getTinymceIDs(ui)
+        ids = Alchemy.tinymceIDsFromDraggable(ui)
+        Alchemy.Tinymce.init(ids)
 
   SortableContents: (selector, token) ->
     $(selector).sortable
@@ -68,8 +67,22 @@ $.extend Alchemy,
           url: Alchemy.routes.order_admin_contents_path
           type: "POST"
           data: "authenticity_token=" + encodeURIComponent(token) + "&" + $.param(content_ids: ids)
-        return
-    return
+      start: (event, ui) ->
+        ids = Alchemy.tinymceIDsFromDraggable(ui)
+        Alchemy.Tinymce.remove(ids)
+        ui.item.find('textarea.default_tinymce, textarea.custom_tinymce').css
+          background: '#ededed'
+          color: '#ededed'
+          visibility: 'visible'
+          height: 196
+      stop: (event, ui) ->
+        ids = Alchemy.tinymceIDsFromDraggable(ui)
+        ui.item.find('textarea.default_tinymce, textarea.custom_tinymce').css
+          background: '#fff'
+          color: '#000'
+          visibility: 'hidden'
+          height: 140
+        Alchemy.Tinymce.init(ids)
 
   SortablePictures: (selector, token) ->
     $(selector).sortable
