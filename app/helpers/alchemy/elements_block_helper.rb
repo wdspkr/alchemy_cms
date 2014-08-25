@@ -145,13 +145,7 @@ module Alchemy
           yield ElementViewHelper.new(self, element: element)
         else
           element.contents.each do |content|
-            begin
-              # try to render the contents view partial
-              concat render(content, content: content)
-            rescue ActionView::MissingTemplate
-              # if not present we render the contents essence view partial instead
-              concat render(content.essence, content: content)
-            end
+            concat render_content_or_essence_view(content)
           end
         end
       end
@@ -207,15 +201,16 @@ module Alchemy
         if block_given?
           yield ElementEditorHelper.new(self, element: element)
         else
-          element.contents.each do |content|
-            concat render_essence_editor(content)
-          end
+          # Render editor partials for each content
+          render_contents_for_element_editor(element)
+          # Render "new content" button, if available contents are defined
           if element.available_contents.any?
             concat render_new_content_link(element)
           end
         end
       end
 
+      # Wrap the output, if the contents are sortable
       if options[:sortable]
         output = content_tag(:div, output, class: 'sortable-contents')
       else
@@ -223,5 +218,39 @@ module Alchemy
       end
     end
 
+    private
+
+    # Renders content editor partials for all contents of element
+    # If a content is defined in +elements.yml+, but not present on element yet
+    # it renders a button to create that missing content.
+    def render_contents_for_element_editor(element)
+      # Store the contents that should be rendered
+      content_descriptions = element.content_descriptions.dup
+
+      # Render editor partials for all contents of element
+      element.contents.each do |content|
+        # Remove it's reference from collection of rendarable contents
+        content_descriptions.delete_if { |c| c['name'] == content.name }
+        # Render the actual editor partial
+        concat render_essence_editor(content)
+      end
+
+      # If any contents are missing, render a button for each of it
+      content_descriptions.each do |content|
+        concat render('alchemy/admin/contents/missing', {
+          element: element,
+          name: content['name'],
+          options: {}
+        })
+      end
+    end
+
+    # Try's to render the contents view partial.
+    # If it's not there render the contents essence view partial instead.
+    def render_content_or_essence_view(content)
+      render(content, content: content)
+    rescue ActionView::MissingTemplate
+      render(content.essence, content: content)
+    end
   end
 end

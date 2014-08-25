@@ -131,6 +131,20 @@ module Alchemy
           expect(subject).to have_selector('.new_content_link')
         end
       end
+
+      context "with element having missing contents" do
+        subject { element_editor_for(element) }
+
+        before do
+          element.stub(contents: [])
+        end
+
+        it "renders missing content buttons" do
+          element.content_descriptions.each do |content|
+            expect(subject).to have_selector("[data-element-#{element.id}-missing-content=\"#{content['name']}\"]")
+          end
+        end
+      end
     end
 
     describe ElementsBlockHelper::ElementViewHelper do

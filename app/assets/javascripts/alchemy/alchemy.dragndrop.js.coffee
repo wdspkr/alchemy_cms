@@ -53,7 +53,7 @@ $.extend Alchemy,
 
   SortableContents: (selector, token) ->
     $(selector).sortable
-      items: ".content_editor"
+      items: ".content_editor:not(.missing)"
       handle: "label"
       opacity: 0.5
       cursor: "move"

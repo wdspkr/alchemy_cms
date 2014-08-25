@@ -548,20 +548,31 @@ select.long {
   position: relative;
   overflow: hidden;
 
-  &.missing p {
-    line-height: 25px;
-    padding: 2*$default-padding;
-    border: 1px solid #f5b04e;
-    background-color: #f5dea9;
-    @extend %rounded-border;
-    font-size: 11px;
+  &.missing {
 
-    span.icon.warning {
-      vertical-align: text-bottom;
-      margin-left: 2px;
-      margin-right: 6px;
+    > p {
+      line-height: 25px;
+      padding: 2*$default-padding;
+      margin: $default-margin 0;
+      border: 1px solid #f5b04e;
+      background-color: #f5dea9;
+      @extend %rounded-border;
+      font-size: 11px;
+
+      .icon.warning {
+        vertical-align: text-bottom;
+        margin-left: 2px;
+        margin-right: 6px;
+      }
+    }
+
+    .content-editor-label label {
+      cursor: default;
+      background: transparent;
+      padding: 2px 0;
     }
   }
+
 
   &.display_inline {
     @include inline-block;
