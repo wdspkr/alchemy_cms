@@ -6,6 +6,6 @@ class ApplicationController < ActionController::Base
   private
 
   def current_user
-    nil
+    DummyUser.find_or_create_by(email: "dummy@alchemy.com")
   end
 end
